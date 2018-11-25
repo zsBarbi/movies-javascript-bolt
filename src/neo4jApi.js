@@ -3,8 +3,19 @@ var Movie = require('./models/Movie');
 var MovieCast = require('./models/MovieCast');
 var _ = require('lodash');
 
-var neo4j = window.neo4j.v1;
-var driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "abcde"));
+
+//local development
+// var neo4j = window.neo4j.v1;
+// var driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "R3lofl3x"));
+
+
+//heroku
+var graphenedbURL = process.env.GRAPHENEDB_BOLT_URL;
+var graphenedbUser = process.env.GRAPHENEDB_BOLT_USER;
+var graphenedbPass = process.env.GRAPHENEDB_BOLT_PASSWORD;
+
+var driver = neo4j.driver(graphenedbURL, neo4j.auth.basic(graphenedbUser, graphenedbPass));
+
 
 function searchMovies(queryString) {
   var session = driver.session();
@@ -42,7 +53,6 @@ function getMovie(title) {
 
       if (_.isEmpty(result.records))
         return null;
-
       var record = result.records[0];
       return new MovieCast(record.get('title'), record.get('cast'));
     })
@@ -50,6 +60,95 @@ function getMovie(title) {
       session.close();
       throw error;
     });
+}
+
+function updateMovie(movie) {
+  console.log("movie obj to be updated: ", movie);
+  searchMovies(movie.title);
+  var session = driver.session();
+  return session
+    .run(
+      'MATCH (m:Movie { title: {title} }) \
+      SET m = {movie}',{movie: movie, title: movie.title}
+    )
+    .then(result => {
+      session.close();
+      return 0;
+    })
+    .catch(error => {
+      session.close();
+      throw error;
+    })
+}
+
+function createMovie(movie) {
+  console.log("movie to create: ", movie);
+  var session1 = driver.session();
+  return session1
+    .run(
+      'MATCH (m:Movie { title: {title} }) return count(m) as count', {title: movie.title}
+    )
+    .then(result => {
+      session1.close();
+      //console.log('count def: ', result.records[0].get('count'));
+      if (result.records[0].get('count').low != 0 || result.records[0].get('count').high != 0) {
+        return 'Movie with this title already exists!';
+      } else {
+          //return createMovieForReal(movie);
+          var session = driver.session();
+          return session
+          .run(
+            'CREATE (m: Movie {title: {title}, \
+              released: {released}, tagline: {tagline}})',
+              {title:movie.title, tagline: movie.tagline, released: movie.released})
+          .then(result => {
+            session.close();
+            console.log("successfully added, for real")
+            return 'Movie successfully added to the databas!';
+          })
+          .catch(error => {
+            session.close();
+            throw error;
+          })
+      }
+    })
+}
+
+function createMovieForReal(movie) {
+  var session = driver.session();
+  return session
+  .run(
+    'CREATE (m: Movie {title: {title}, \
+      released: {released}, tagline: {tagline}})',
+      {title:movie.title, tagline: movie.tagline, released: movie.released})
+  .then(result => {
+    session.close();
+    console.log("successfully added, for real")
+    return 'Movie successfully added to the databas!';
+  })
+  .catch(error => {
+    session.close();
+    throw error;
+  })
+}
+
+function deleteMovie(title) {
+  console.log("title: ", title);
+  var session = driver.session();
+  return session
+    .run(
+      "MATCH (movie:Movie { title: {title} }) \
+      OPTIONAL MATCH (movie)-[r]-() \
+      DELETE movie, r\
+      RETURN 0", {title})
+    .then(result => {
+      session.close();
+      return 0;
+    })
+    .catch(error => {
+      session.close();
+      throw error;
+    })
 }
 
 function getGraph() {
@@ -85,4 +184,6 @@ function getGraph() {
 exports.searchMovies = searchMovies;
 exports.getMovie = getMovie;
 exports.getGraph = getGraph;
-
+exports.deleteMovie = deleteMovie;
+exports.updateMovie = updateMovie;
+exports.createMovie = createMovie;
