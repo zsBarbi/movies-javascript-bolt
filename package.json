@@ -8,7 +8,9 @@
     "express": "^4.16.4",
     "lodash": "^4.15.0",
     "neo4j-driver": "^1.0.4",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "html-webpack-plugin": "^2.10.0",
+    "webpack": "^1.12.14"
   },
   "devDependencies": {
     "babel-core": "^6.3.26",
