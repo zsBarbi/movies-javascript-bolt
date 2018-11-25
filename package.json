@@ -5,8 +5,10 @@
   "repository": "",
   "license": "PRIVATE",
   "dependencies": {
+    "express": "^4.16.4",
     "lodash": "^4.15.0",
-    "neo4j-driver": "^1.0.4"
+    "neo4j-driver": "^1.0.4",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "babel-core": "^6.3.26",
@@ -23,8 +25,8 @@
   },
   "scripts": {
     "clean": "rimraf build && rimraf build",
-    "build": "webpack -p",
-    "start": "webpack-dev-server -p",
+    "build": "webpack-dev-server -p",
+    "start": "webpack -p",
     "dev": "webpack-dev-server"
   }
 }
