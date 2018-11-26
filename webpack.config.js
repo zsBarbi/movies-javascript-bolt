@@ -19,9 +19,9 @@ module.exports = {
   },
 
   output: {
-    filename: './src/app.js',
-    path: './build/',
-    publicPatch: './build/'
+    path: __dirname,
+    publicPath: '/',
+    filename: 'bundle.js'
   },
 
   debug: true,
