@@ -65,25 +65,42 @@
             </table>
         </div>
     </div>
-    <div class="col-md-7">
-        <div class="panel panel-default">
-            <div class="panel-heading" id="title">Details</div>
-            <div class="row">
-                <div class="col-sm-4 col-md-4">
-                    <img src="" class="well" id="poster"/>
-                </div>
-                <div class="col-md-8 col-sm-8">
-                    <h4>Crew</h4>
-                    <ul id="crew">
-                    </ul>
-                    <div id = "newActor">
-                      <select class="form-control" id = "actorsToAdd"></select>
-                      <input type = "text" placeholder="role" required id = "role"></input>
-                      <button id = "addActorToMovie" click="addActorToMovie()">Add</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id = "right">
+      <div class="col-md-7">
+          <div class="panel panel-default">
+              <div class="panel-heading" id="title">Details</div>
+              <div class="row">
+                  <div class="col-sm-4 col-md-4">
+                      <img src="" class="well" id="poster"/>
+                      <span class="label label-success" id="bacon">0000</span>
+                  </div>
+                  <div class="col-md-8 col-sm-8">
+                      <h4>Crew</h4>
+                      <ul id="crew">
+                      </ul>
+                      <div id = "newActor">
+                        <select class="form-control" id = "actorsToAdd"></select>
+                        <input type = "text" placeholder="role" id = "role"></input>
+                        <button id = "addActorToMovie" click="addActorToMovie()">Add</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+<!-- ACTORS LIST
+      <div class="col-md-7">
+          <div class="panel panel-default">
+              <div class="panel-heading" id="title">Details</div>
+              <div class="row">
+                  <div class="col-md-8 col-sm-8">
+                      <h4>Actors</h4>
+                      <ul id="actorsList">
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </div> -->
+
     </div>
 </div>
 
@@ -159,7 +176,6 @@
     </div>
   </div>
 </div>
-
 </div>
 
 <style type="text/css">
@@ -178,6 +194,10 @@
     }
     #role {
       margin-right: 5px;
+    }
+
+    .col-md-8 {
+      padding-left: 50px;
     }
 </style>
 

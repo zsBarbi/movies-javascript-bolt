@@ -64,8 +64,19 @@ $('<button class="btn btn-default" id = "createButton" id="createMovieButton" da
 var buttons = $('#buttons');
 button.appendTo(buttons);
 
+$("#actorsToAdd").on('change', function() {
+  var actor = this.value;
+  api
+    .getBaconPath(actor)
+    .then(result => {
+      var bacon = result.low != 0 ? result.low : result.high;
+      console.log(bacon);
+      $("#bacon").text(bacon);
+    })
+})
 
 function showMovie(title) {
+  $("#bacon").text("0000");
   api
     .getMovie(title)
     .then(movie => {
@@ -85,6 +96,7 @@ function showMovie(title) {
       persons.forEach(person => {
           //console.log("person which may be added: ", person);
           $("<option value = \"" + person.name + "\">" + person.name + " (" + person.born + ") " + "</option>").appendTo($("#actorsToAdd"))
+          //$("<li>" + person.name + "</li>").appendTo("#actorsList")
       })
 
     });

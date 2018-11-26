@@ -6,23 +6,36 @@ var _ = require('lodash');
 
 
 // //local development
-// var neo4j = window.neo4j.v1;
-// var driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "R3lofl3x"));
+var driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "R3lofl3x"));
 
 
 //heroku
-var graphenedbURL = "https://app115045636-zsN3Rp:b.N4b260XCLkxA.9abEcB7ZPd3S4ixQ@hobby-dbpacodifichgbkecgjknebl.dbs.graphenedb.com:24780";
-var graphenedbUser = "app115045636-zsN3Rp";
-var graphenedbPass = "b.N4b260XCLkxA.9abEcB7ZPd3S4ixQ";
-
-var driver = neo4j.driver(graphenedbURL, neo4j.auth.basic(graphenedbUser, graphenedbPass));
-//
-// var graphenedbURL = process.env.GRAPHENEDB_BOLT_URL;
-// var graphenedbUser = process.env.GRAPHENEDB_BOLT_USER;
-// var graphenedbPass = process.env.GRAPHENEDB_BOLT_PASSWORD;
+// var graphenedbURL = "https://app115045636-zsN3Rp:b.N4b260XCLkxA.9abEcB7ZPd3S4ixQ@hobby-dbpacodifichgbkecgjknebl.dbs.graphenedb.com:24780";
+// var graphenedbUser = "app115045636-zsN3Rp";
+// var graphenedbPass = "b.N4b260XCLkxA.9abEcB7ZPd3S4ixQ";
 //
 // var driver = neo4j.driver(graphenedbURL, neo4j.auth.basic(graphenedbUser, graphenedbPass));
 
+
+function getBaconPath(actor) {
+  console.log("searching for this actor: ", actor);
+  var session = driver.session();
+  return session
+    .run(
+      "MATCH p=shortestPath((bacon:Person {name:'Kevin Bacon'})-[*]-(a:Person {name:{actor}}))\
+       RETURN length(p) as baconPath",
+       {actor: actor}
+    )
+    .then(result => {
+      session.close();
+      var record = result.records[0];
+      return record.get('baconPath');
+    })
+    .catch(error => {
+      session.close();
+      throw error;
+    });
+}
 
 function searchMovies(queryString) {
   var session = driver.session();
@@ -236,3 +249,4 @@ exports.updateMovie = updateMovie;
 exports.createMovie = createMovie;
 exports.getOtherActors = getOtherActors;
 exports.addActorToMovie = addActorToMovie;
+exports.getBaconPath = getBaconPath;
