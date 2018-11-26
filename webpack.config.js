@@ -21,7 +21,8 @@ module.exports = {
   output: {
     filename: 'app.js',
     path: './build/',
-    publicPatch: './build/'
+    publicPatch: '/'
+    //publicPatch: './build/'
   },
 
   debug: true,

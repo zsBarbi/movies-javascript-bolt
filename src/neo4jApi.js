@@ -1,5 +1,6 @@
 require('file?name=[name].[ext]!../node_modules/neo4j-driver/lib/browser/neo4j-web.min.js');
 var Movie = require('./models/Movie');
+var Actor = require('./models/Actor');
 var MovieCast = require('./models/MovieCast');
 var _ = require('lodash');
 
@@ -60,6 +61,25 @@ function getMovie(title) {
       session.close();
       throw error;
     });
+}
+
+function getOtherActors(title) {
+  var session = driver.session();
+  return session
+  .run(
+    "MATCH (p: Person) RETURN p"
+  )
+  .then(result => {
+    session.close();
+    return result.records.map(record => {
+      //console.log(record);
+      return new Actor(record.get('p'));
+    });
+  })
+  .catch(error => {
+    session.close();
+    throw error;
+  });
 }
 
 function updateMovie(movie) {
@@ -151,6 +171,28 @@ function deleteMovie(title) {
     })
 }
 
+function addActorToMovie(title, actorName, role) {
+  var session = driver.session();
+  return session
+    .run(
+      "MATCH (a:Person{name:{actorName}}), (m:Movie{title:{title}})\
+      MERGE (a)-[relationship:ACTED_IN]->(m)\
+      ON CREATE SET relationship.roles = {role}\
+      ON MATCH SET relationship.roles = {role}",
+      {actorName:actorName, title: title, role: role})
+    .then(result => {
+      session.close();
+      return "Relationship added!";
+    })
+    .catch(error => {
+      session.close();
+      throw error;
+      return "Something happened.";
+    })
+}
+
+
+
 function getGraph() {
   var session = driver.session();
   return session.run(
@@ -176,7 +218,6 @@ function getGraph() {
           rels.push({source, target})
         })
       });
-
       return {nodes, links: rels};
     });
 }
@@ -187,3 +228,5 @@ exports.getGraph = getGraph;
 exports.deleteMovie = deleteMovie;
 exports.updateMovie = updateMovie;
 exports.createMovie = createMovie;
+exports.getOtherActors = getOtherActors;
+exports.addActorToMovie = addActorToMovie;

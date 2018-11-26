@@ -83,6 +83,11 @@
                     <h4>Crew</h4>
                     <ul id="crew">
                     </ul>
+                    <div id = "newActor">
+                      <select class="form-control" id = "actorsToAdd"></select>
+                      <input type = "text" placeholder="role" required id = "role"></input>
+                      <button id = "addActorToMovie" click="addActorToMovie()">Add</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -170,6 +175,17 @@
     .node.movie { fill: #BBB; }
     .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; }
     #buttons {display: inline-flex;}
+    #newActor {display: flex; padding-bottom: 10px}
+    #actorsToAdd {width: 50%; margin-right: 5px;}
+    .col-md-7 {
+      width: 50%;
+    }
+    .col-md-5 {
+      margin-left: 40px;
+    }
+    #role {
+      margin-right: 5px;
+    }
 </style>
 
 </body>

@@ -72,14 +72,44 @@ function showMovie(title) {
       if (!movie) return;
 
       $("#title").text(movie.title);
-      //$("#poster").attr("src", "http://neo4j-contrib.github.io/developer-resources/language-guides/assets/posters/" + movie.title + ".jpg");
-      //$("#poster").attr("alt", "Poster");
+      $("#poster").attr("src", "http://neo4j-contrib.github.io/developer-resources/language-guides/assets/posters/" + movie.title + ".jpg");
+      $("#poster").attr("alt", "Poster");
       var $list = $("#crew").empty();
       movie.cast.forEach(cast => {
         $list.append($("<li>" + cast.name + " " + cast.job + (cast.job == "acted" ? " as " + cast.role : "") + "</li>"));
       });
     }, "json");
-}
+  api
+    .getOtherActors(title)
+    .then(persons => {
+      persons.forEach(person => {
+          //console.log("person which may be added: ", person);
+          $("<option value = \"" + person.name + "\">" + person.name + " (" + person.born + ") " + "</option>").appendTo($("#actorsToAdd"))
+      })
+
+    });
+};
+
+$("#addActorToMovie").on('click', function() {
+  var actorName = $("#actorsToAdd option:selected").val();
+  var role = $("#role").val();
+  var title = $("#title").text();
+
+  if (role == "") {
+    $("#messageModal").html('Specify a role! ');
+    jQuery("#dialogModal").modal('toggle');
+    return;
+  }
+
+  api
+    .addActorToMovie(title, actorName, role)
+      .then(response => {
+          $("#messageModal").html(response);
+          jQuery("#dialogModal").modal('toggle');
+          showMovie(title);
+        });
+});
+
 
 function deleteMovie(title) {
   api
