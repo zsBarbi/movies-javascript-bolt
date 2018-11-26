@@ -11,17 +11,17 @@ var _ = require('lodash');
 
 
 //heroku
-// var graphenedbURL = "bolt://hobby-dbpacodifichgbkecgjknebl.dbs.graphenedb.com:24786";
-// var graphenedbUser = "app115045636-zsN3Rp";
-// var graphenedbPass = "b.N4b260XCLkxA.9abEcB7ZPd3S4ixQ";
-//
-// var driver = neo4j.driver(graphenedbURL, neo4j.auth.basic(graphenedbUser, graphenedbPass));
-
-var graphenedbURL = process.env.GRAPHENEDB_BOLT_URL;
-var graphenedbUser = process.env.GRAPHENEDB_BOLT_USER;
-var graphenedbPass = process.env.GRAPHENEDB_BOLT_PASSWORD;
+var graphenedbURL = "bolt://hobby-dbpacodifichgbkecgjknebl.dbs.graphenedb.com:24786";
+var graphenedbUser = "app115045636-zsN3Rp";
+var graphenedbPass = "b.N4b260XCLkxA.9abEcB7ZPd3S4ixQ";
 
 var driver = neo4j.driver(graphenedbURL, neo4j.auth.basic(graphenedbUser, graphenedbPass));
+// 
+// var graphenedbURL = process.env.GRAPHENEDB_BOLT_URL;
+// var graphenedbUser = process.env.GRAPHENEDB_BOLT_USER;
+// var graphenedbPass = process.env.GRAPHENEDB_BOLT_PASSWORD;
+//
+// var driver = neo4j.driver(graphenedbURL, neo4j.auth.basic(graphenedbUser, graphenedbPass));
 
 
 function searchMovies(queryString) {
