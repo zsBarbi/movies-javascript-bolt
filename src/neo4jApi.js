@@ -11,7 +11,7 @@ var _ = require('lodash');
 
 
 //heroku
-var graphenedbURL = "bolt://hobby-dbpacodifichgbkecgjknebl.dbs.graphenedb.com:24786";
+var graphenedbURL = "https://hobby-dbpacodifichgbkecgjknebl.dbs.graphenedb.com:24786";
 var graphenedbUser = "app115045636-zsN3Rp";
 var graphenedbPass = "b.N4b260XCLkxA.9abEcB7ZPd3S4ixQ";
 
