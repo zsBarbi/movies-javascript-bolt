@@ -1,4 +1,4 @@
-require('file?name=[name].[ext]!../node_modules/neo4j-driver/lib/browser/neo4j-web.min.js');
+var neo4j = require('neo4j-driver').v1;
 var Movie = require('./models/Movie');
 var Actor = require('./models/Actor');
 var MovieCast = require('./models/MovieCast');
